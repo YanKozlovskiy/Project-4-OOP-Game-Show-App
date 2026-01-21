@@ -81,6 +81,7 @@ class Game {
         hearts[index].classList.add('animated', 'hinge');
         if (this.missed === 5) {
             this.takeInput = false;
+            defeatSound.play();
             setTimeout(() => {
                 this.gameOver();
             }, 2000);
@@ -99,9 +100,6 @@ class Game {
             overlay.classList.add('lose');
             overlay.classList.remove('win');
             gameOverMessage.textContent = 'Sorry, better luck next time!';
-            setTimeout(() => {
-                defeatSound.play();
-            }, 500);
         } else {
             overlay.classList.remove('lose');
             overlay.classList.add('win');
