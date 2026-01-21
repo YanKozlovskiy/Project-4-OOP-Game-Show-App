@@ -96,6 +96,7 @@ class Game {
         overlay.style.display = 'block';
         overlay.classList.remove('start');
         const gameOverMessage = document.getElementById('game-over-message');
+        instructionText.textContent = 'Press enter or click the "Start Game" button to try again!';
         if (this.missed === 5 ) {
             overlay.classList.add('lose');
             overlay.classList.remove('win');
