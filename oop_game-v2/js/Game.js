@@ -42,6 +42,7 @@ class Game {
             new Phrase('Break a Leg')
         ];
         this.activePhrase = null;
+        this.takeInput = true;
     }
     startGame() {
         document.getElementById('overlay').style.display = 'none';
@@ -54,21 +55,23 @@ class Game {
     }
     handleInteraction(button) {
         const letter = button.textContent;
-        if (this.activePhrase.checkLetter(letter)) {
-            correctSound.play();
-            button.classList.add('chosen');
-            button.classList.add('animated', 'flash');
-            this.activePhrase.showMatchedLetter(letter);
-            if (this.checkForWin()) {
-                this.gameOver();
+        if (this.takeInput) {
+            if (this.activePhrase.checkLetter(letter)) {
+                correctSound.play();
+                button.classList.add('chosen');
+                button.classList.add('animated', 'flash');
+                this.activePhrase.showMatchedLetter(letter);
+                if (this.checkForWin()) {
+                    this.gameOver();
+                }
+            } else {
+                incorrectSound.play();
+                button.classList.add('wrong');
+                button.classList.add('animated', 'shake');
+                this.removeLife();
             }
-        } else {
-            incorrectSound.play();
-            button.classList.add('wrong');
-            button.classList.add('animated', 'shake');
-            this.removeLife();
+            button.disabled = true;
         }
-        button.disabled = true;
     }
     removeLife() {
         this.missed += 1;
@@ -77,6 +80,7 @@ class Game {
         hearts[index].src = 'images/lostHeart.png';
         hearts[index].classList.add('animated', 'hinge');
         if (this.missed === 5) {
+            this.takeInput = false;
             setTimeout(() => {
                 this.gameOver();
             }, 2000);
@@ -113,10 +117,14 @@ class Game {
         keys.forEach(key => key.disabled = false);
         keys.forEach(key => key.classList.remove('chosen', 'wrong', 'animated', 'flash', 'shake'));
         const hearts = document.querySelectorAll('#scoreboard img');
-        hearts.forEach(heart => heart.src = 'images/liveHeart.png');
+        hearts.forEach(heart => {
+            heart.src = 'images/liveHeart.png';
+            heart.classList.remove('animated', 'hinge');
+        });
         const phraseUl = document.querySelector('#phrase ul');
         phraseUl.innerHTML = '';
         this.activePhrase = null;
         this.missed = 0;
+        this.takeInput = true;
     }
 }
