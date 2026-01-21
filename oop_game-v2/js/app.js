@@ -13,9 +13,15 @@ Here we will include event listeners, enabling user interaction with the game, a
 
 */
 
+// instruction text... there should be a better place to put this but I'm not sure where yet
+const instructionText = document.createElement('h4');
+instructionText.textContent = 'Press the Enter key or click start game. Click the keys with the mouse or use your keyboard to play.';
+const startGameButton = document.getElementById('btn__reset');
+startGameButton.before(instructionText);
+
 let game;
 
-document.getElementById('btn__reset').addEventListener('click', () => {
+startGameButton.addEventListener('click', () => {
     game = new Game();
     game.startGame();
 });
@@ -25,6 +31,9 @@ document.getElementById('qwerty').addEventListener('click', (event) => {
         game.handleInteraction(event.target);
     }
 });
+
+
+
 
 // Exceeds expectations: 
 
@@ -40,6 +49,10 @@ document.addEventListener('keyup', (event) => {
                 game.handleInteraction(button);
             }
         });
+    }
+    if (rawKey === 'enter' && document.getElementById('overlay').style.display !== 'none') {
+        game = new Game();
+        game.startGame();
     }
 });
 
